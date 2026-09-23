@@ -2,8 +2,6 @@
 
 Assistente de inteligência artificial para desktop, **local-first** e em português do Brasil. O Jarvis roda como aplicativo Windows com uma interface HUD desenvolvida em PySide6/QML, conecta-se a provedores de IA locais ou em nuvem e reúne voz, memória de longo prazo, automações e um agente com ferramentas reais.
 
-> Relatório técnico do projeto atualizado em 23/09/2026.
-
 ![HUB do Jarvis no tema escuro](img/01-hub-tema-escuro.png)
 
 ## Sumário
@@ -151,8 +149,6 @@ A janela de configurações possui cinco áreas:
 - Blocos de código com ações de copiar, baixar e visualizar.
 - Seleção e cópia de texto.
 - Confirmação antes de ações destrutivas.
-
-> A captura completa do histórico também está disponível em `img/05-historico-conversas.png`, mas não é exibida aqui porque contém uma conversa de demonstração.
 
 ## Personalização por perfil e setor
 
