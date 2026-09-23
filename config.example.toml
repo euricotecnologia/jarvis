@@ -1,0 +1,117 @@
+[app]
+database_path = "data/jarvis.db"
+default_provider = "ollama"
+fallback_order = ["ollama", "lmstudio", "openai", "claude", "gemini"]
+system_prompt = "Você e Jarvis, um assistente pessoal prestativo, objetivo e seguro. Responda em português do Brasil. Nunca execute uma ação sensivel sem confirmação explicita."
+# Cidade usada no cartao de clima do HUB (Open-Meteo, sem chave de API).
+# Também editavel em Configurações > GERAL > 04 CLIMA (salvo no banco local).
+weather_city = "São Paulo"
+
+[voice]
+enabled = true
+language = "pt"
+# transcription_engine: "local" (faster-whisper, offline, gratis) | "openai"
+# (usa OPENAI_API_KEY; mais preciso; ~US$ 0,006/min).
+transcription_engine = "local"
+whisper_model = "small"
+# Modelo da OpenAI quando transcription_engine = "openai":
+transcription_cloud_model = "gpt-4o-transcribe"
+device = "cpu"
+compute_type = "int8"
+model_cache_path = "data/models"
+sample_rate = 16000
+silence_seconds = 3.5
+no_speech_timeout_seconds = 12.0
+max_record_seconds = 45.0
+speech_rms_threshold = 0.003
+tts_rate = 185
+tts_volume = 1.0
+max_spoken_chars = 800
+# tts_engine: "windows" (SAPI5) | "kokoro" (voz neural local, pt-BR, sem chave —
+# precisa de: pip install kokoro-onnx + os arquivos em data/models/kokoro/) |
+# "gemini" (Gemini TTS, requer GEMINI_API_KEY).
+tts_engine = "windows"
+# Gemini: "gemini-3.1-flash-tts-preview" etc. Kokoro: "kokoro-v1.0".
+tts_model = "sapi5"
+# Windows: nome da voz SAPI. Kokoro: "pf_dora" | "pm_alex" | "pm_santa".
+# Gemini: "Kore" | "Aoede" | "Puck" | ...
+tts_voice = "Microsoft Maria Desktop - Portuguese(Brazil)"
+# Velocidade da fala do Kokoro (1.0 = normal).
+kokoro_speed = 1.0
+# tts_buffer_seconds menor = a voz do Gemini comeca antes (risco de engasgo se
+# a conexão for instavel). 0.4 costuma ser um bom equilibrio.
+tts_buffer_seconds = 0.4
+# tts_stream = true toca o audio do Gemini conforme ele chega (menor latencia).
+tts_stream = true
+# Palavra de ativação: escuta o microfone e liga a voz ao ouvir a palavra.
+# wake_word_model = modelo Whisper so para detecção. "base" acerta bem "Jarvis"
+# e ainda e rapido; "tiny" e mais leve mas erra mais; "small" e o mais preciso.
+wake_word_enabled = false
+wake_word = "jarvis"
+wake_word_model = "base"
+
+[agent]
+# Permissões do Jarvis para agir no computador. Também ajustavel na tela
+# "04 // PERMISSÕES" da interface. O agente confirma antes de apagar,
+# sobrescrever, mover ou rodar comandos perigosos.
+enabled = false
+filesystem_read = true
+filesystem_write = false
+shell = false
+# browser = true habilita internet: abrir_site, pesquisar_web (abre o navegador),
+# buscar_na_web (DuckDuckGo/Bing, so stdlib) e ler_pagina_web.
+browser = false
+# ssh = true habilita executar_no_servidor / listar_servidores (SSH numa VPS).
+# Todo comando remoto pede confirmação. Servidores em Configurações > Servidores.
+ssh = false
+# Pastas onde ele pode escrever/apagar. Vazio = so a pasta do usuário.
+allowed_roots = []
+max_iterations = 12
+shell_timeout_seconds = 60
+
+[vision]
+# A IA enxergar pela webcam quando você pedir ("o que você está vendo?").
+# Também no botão de "05 WEBCAM (VISÃO)" em Configurações. Desligado por padrão.
+# Precisa de: pip install -e ".[vision]"  e de um modelo com visão
+# (gpt-4o, gpt-4.1, claude-*, gemini-*, llava local...). gpt-4 antigo NÃO enxerga.
+enabled = false
+camera_index = 0
+jpeg_quality = 85
+
+[providers.ollama]
+kind = "ollama"
+enabled = true
+model = "qwen3"
+base_url = "http://localhost:11434/v1"
+timeout_seconds = 120
+
+[providers.lmstudio]
+kind = "lmstudio"
+enabled = true
+model = "local-model"
+base_url = "http://localhost:1234/v1"
+timeout_seconds = 120
+
+[providers.openai]
+kind = "openai"
+enabled = false
+model = "gpt-5.6-luna"
+base_url = "https://api.openai.com/v1"
+api_key_env = "OPENAI_API_KEY"
+timeout_seconds = 120
+
+[providers.claude]
+kind = "anthropic"
+enabled = false
+model = "claude-sonnet-5"
+base_url = "https://api.anthropic.com/v1"
+api_key_env = "ANTHROPIC_API_KEY"
+timeout_seconds = 120
+
+[providers.gemini]
+kind = "gemini"
+enabled = false
+model = "gemini-3.7-flash"
+base_url = "https://generativelanguage.googleapis.com/v1beta/openai"
+api_key_env = "GEMINI_API_KEY"
+timeout_seconds = 120
